@@ -282,6 +282,17 @@ function projectMonthlySpend(requestsPerDay, inputTokensPerRequest, outputTokens
     };
 }
 
+// Make functions globally available for browser use
+if (typeof window !== 'undefined') {
+    window.calculateVisionCost = calculateVisionCost;
+    window.calculateFunctionCallOverhead = calculateFunctionCallOverhead;
+    window.compareBatchVsRealtime = compareBatchVsRealtime;
+    window.calculateRetryOverhead = calculateRetryOverhead;
+    window.calculateBudgetCapacity = calculateBudgetCapacity;
+    window.projectMonthlySpend = projectMonthlySpend;
+    window.VISION_PRICING = VISION_PRICING;
+}
+
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
