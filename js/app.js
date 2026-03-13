@@ -134,6 +134,11 @@ class TokenPriceApp {
         `;
         document.getElementById('tokenSummary').innerHTML = summaryHtml;
 
+        // Update Chart.js visualization
+        if (typeof chartManager !== 'undefined') {
+            chartManager.updateChart(this.currentResults);
+        }
+
         // Sort results by total cost for better readability
         const sortedResults = [...this.currentResults].sort((a, b) => a.totalCost - b.totalCost);
 
@@ -342,6 +347,9 @@ class TokenPriceApp {
     handleBack() {
         document.getElementById('resultsCard').style.display = 'none';
         document.getElementById('emptyState').style.display = 'block';
+        if (typeof chartManager !== 'undefined') {
+            chartManager.destroy();
+        }
         this.currentResults = [];
         this.cacheKeyForCopy = null;
     }
@@ -356,6 +364,9 @@ class TokenPriceApp {
         document.getElementById('customRatioDiv').style.display = 'none';
         document.getElementById('resultsCard').style.display = 'none';
         document.getElementById('emptyState').style.display = 'block';
+        if (typeof chartManager !== 'undefined') {
+            chartManager.destroy();
+        }
         this.currentResults = [];
         this.cacheKeyForCopy = null;
     }
