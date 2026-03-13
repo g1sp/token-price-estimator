@@ -1,4 +1,9 @@
 {
+  "metadata": {
+    "last_updated": "2025-03-12",
+    "version": "2.0",
+    "notes": "Includes long-context pricing tiers (synthesis of Claude & ChatGPT approaches)"
+  },
   "providers": {
     "claude": {
       "name": "Claude (Anthropic)",
@@ -7,20 +12,38 @@
         {
           "name": "Claude 3.5 Opus",
           "id": "claude-opus-4-6",
-          "input_per_1m": 15.00,
-          "output_per_1m": 75.00
+          "short_context": {
+            "input_per_1m": 15.00,
+            "output_per_1m": 75.00
+          },
+          "long_context": null,
+          "long_threshold": null,
+          "supports_cache": false,
+          "cached_price_per_1m": null
         },
         {
           "name": "Claude 3.5 Sonnet",
           "id": "claude-sonnet-4-6",
-          "input_per_1m": 3.00,
-          "output_per_1m": 15.00
+          "short_context": {
+            "input_per_1m": 3.00,
+            "output_per_1m": 15.00
+          },
+          "long_context": null,
+          "long_threshold": null,
+          "supports_cache": false,
+          "cached_price_per_1m": null
         },
         {
           "name": "Claude 3.5 Haiku",
           "id": "claude-haiku-4-5",
-          "input_per_1m": 0.80,
-          "output_per_1m": 4.00
+          "short_context": {
+            "input_per_1m": 0.80,
+            "output_per_1m": 4.00
+          },
+          "long_context": null,
+          "long_threshold": null,
+          "supports_cache": false,
+          "cached_price_per_1m": null
         }
       ]
     },
@@ -31,20 +54,41 @@
         {
           "name": "Gemini 2.0 Flash",
           "id": "gemini-2-flash",
-          "input_per_1m": 0.075,
-          "output_per_1m": 0.30
+          "short_context": {
+            "input_per_1m": 0.075,
+            "output_per_1m": 0.30
+          },
+          "long_context": null,
+          "long_threshold": 200000,
+          "supports_cache": true,
+          "cached_price_per_1m": 0.0075
         },
         {
           "name": "Gemini 1.5 Pro",
           "id": "gemini-1.5-pro",
-          "input_per_1m": 1.50,
-          "output_per_1m": 6.00
+          "short_context": {
+            "input_per_1m": 1.50,
+            "output_per_1m": 6.00
+          },
+          "long_context": {
+            "input_per_1m": 2.50,
+            "output_per_1m": 15.00
+          },
+          "long_threshold": 200000,
+          "supports_cache": true,
+          "cached_price_per_1m": 0.15
         },
         {
           "name": "Gemini 1.5 Flash",
           "id": "gemini-1.5-flash",
-          "input_per_1m": 0.075,
-          "output_per_1m": 0.30
+          "short_context": {
+            "input_per_1m": 0.075,
+            "output_per_1m": 0.30
+          },
+          "long_context": null,
+          "long_threshold": 200000,
+          "supports_cache": true,
+          "cached_price_per_1m": 0.0075
         }
       ]
     },
@@ -55,20 +99,41 @@
         {
           "name": "GPT-4o",
           "id": "gpt-4o",
-          "input_per_1m": 2.50,
-          "output_per_1m": 10.00
+          "short_context": {
+            "input_per_1m": 2.50,
+            "output_per_1m": 10.00
+          },
+          "long_context": {
+            "input_per_1m": 5.00,
+            "output_per_1m": 22.50
+          },
+          "long_threshold": 272000,
+          "supports_cache": true,
+          "cached_price_per_1m": 0.25
         },
         {
           "name": "GPT-4 Turbo",
           "id": "gpt-4-turbo",
-          "input_per_1m": 10.00,
-          "output_per_1m": 30.00
+          "short_context": {
+            "input_per_1m": 10.00,
+            "output_per_1m": 30.00
+          },
+          "long_context": null,
+          "long_threshold": null,
+          "supports_cache": true,
+          "cached_price_per_1m": 1.00
         },
         {
           "name": "GPT-3.5 Turbo",
           "id": "gpt-3.5-turbo",
-          "input_per_1m": 0.50,
-          "output_per_1m": 1.50
+          "short_context": {
+            "input_per_1m": 0.50,
+            "output_per_1m": 1.50
+          },
+          "long_context": null,
+          "long_threshold": null,
+          "supports_cache": false,
+          "cached_price_per_1m": null
         }
       ]
     }
