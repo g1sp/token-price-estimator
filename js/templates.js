@@ -142,6 +142,268 @@ Team Training:
         provider: "claude",
         scenario: "code",
         description: "Complex agentic workflow - ~2000 input tokens"
+    },
+
+    production: {
+        name: "Production: Full LLM Application Stack",
+        plan: `Build and deploy a production-grade LLM application
+
+Infrastructure Setup:
+- Set up cloud environment (AWS/GCP/Azure)
+- Configure API gateway and load balancing
+- Implement caching layer (Redis)
+- Set up monitoring and logging
+
+API Development:
+- Design RESTful endpoints for LLM inference
+- Implement request validation and sanitization
+- Add rate limiting and authentication
+- Handle concurrent requests (100+ QPS)
+
+Performance Optimization:
+- Implement request batching
+- Add response caching for common queries
+- Use model quantization for faster inference
+- Optimize database queries
+
+Cost Management:
+- Track token usage per user/endpoint
+- Implement spend limits and alerts
+- A/B test models for cost vs. quality
+- Monitor token efficiency metrics
+
+Deployment & DevOps:
+- Set up CI/CD pipeline
+- Implement blue-green deployments
+- Configure auto-scaling policies
+- Add health checks and failover
+
+Observability:
+- Set up distributed tracing
+- Create dashboards for latency/errors
+- Log all LLM requests and responses
+- Monitor model performance drift
+
+Security:
+- Implement API key rotation
+- Add request encryption
+- Audit logging for compliance
+- DDoS protection and rate limiting`,
+        provider: "claude",
+        scenario: "code",
+        description: "Production deployment - ~1500 input tokens"
+    },
+
+    multiagent: {
+        name: "Multi-Agent: Distributed Team Orchestration",
+        plan: `Design a multi-agent system for complex workflows
+
+Architecture Planning:
+- Define agent roles (researcher, analyst, writer, reviewer)
+- Design inter-agent communication protocol
+- Plan message queuing system
+- Define error handling and retry logic
+
+Research Agent:
+- Search and retrieve relevant information
+- Validate source credibility
+- Summarize findings
+- Handle knowledge base queries
+
+Analysis Agent:
+- Process research findings
+- Identify patterns and insights
+- Calculate metrics and statistics
+- Generate visualizations
+
+Writing Agent:
+- Create content based on analysis
+- Maintain consistent tone and style
+- Structure information hierarchically
+- Add citations and references
+
+Review Agent:
+- Validate factual accuracy
+- Check for consistency
+- Suggest improvements
+- Ensure quality standards
+
+Execution Orchestration:
+- Coordinate agent workflows
+- Handle dependencies between agents
+- Manage agent state and context
+- Log all interactions for audit trail
+
+Monitoring & Optimization:
+- Track performance of each agent
+- Measure total latency and cost
+- Identify bottlenecks
+- Optimize agent specialization`,
+        provider: "claude",
+        scenario: "code",
+        description: "Complex multi-agent system - ~1800 input tokens"
+    },
+
+    document: {
+        name: "Document Processing: Batch Analysis Pipeline",
+        plan: `Build an automated document processing system
+
+Document Ingestion:
+- Support multiple file formats (PDF, DOCX, TXT, images)
+- Extract text with OCR for scanned documents
+- Parse document metadata
+- Handle large files (split into chunks)
+
+Text Processing:
+- Normalize and clean extracted text
+- Identify document type and structure
+- Segment into sections and paragraphs
+- Extract key information fields
+
+Classification & Tagging:
+- Classify documents by category
+- Extract relevant tags and keywords
+- Identify entity types (person, location, company)
+- Detect sentiment and tone
+
+Content Extraction:
+- Extract structured data from unstructured text
+- Identify and link related information
+- Generate summaries for each section
+- Create table of contents
+
+Quality Assurance:
+- Validate extracted information
+- Flag low-confidence extractions
+- Cross-reference with known databases
+- Manual review process for edge cases
+
+Storage & Indexing:
+- Store processed documents in database
+- Create full-text search index
+- Build vector embeddings for semantic search
+- Set up backup and disaster recovery
+
+API & Integration:
+- Provide REST API for document submission
+- Implement webhooks for status updates
+- Support async processing for batch jobs
+- Generate reports on processing results`,
+        provider: "openai",
+        scenario: "analysis",
+        description: "Batch document processing - ~1600 input tokens"
+    },
+
+    chatapp: {
+        name: "Chat Application: Real-time Conversational AI",
+        plan: `Develop a real-time chat application with AI
+
+Frontend Development:
+- Build responsive chat UI (web, mobile)
+- Implement real-time messaging with WebSockets
+- Add message history and search
+- Support markdown and rich formatting
+
+Backend Architecture:
+- Design stateless API endpoints
+- Implement session management
+- Set up message queue for reliability
+- Store conversations in database
+
+AI Integration:
+- Stream LLM responses in real-time
+- Maintain conversation context
+- Implement typing indicators
+- Handle interruptions gracefully
+
+Conversation Management:
+- Store full chat history
+- Implement context windowing
+- Add conversation search and retrieval
+- Support multiple conversation threads
+
+User Features:
+- User authentication and profiles
+- Conversation sharing and collaboration
+- Custom system prompts per user
+- Export conversations as PDF/JSON
+
+Moderation & Safety:
+- Content filtering for harmful inputs
+- Detect and prevent prompt injection
+- Log all conversations for compliance
+- Implement user reporting system
+
+Performance & Scaling:
+- Handle 1000+ concurrent users
+- Implement load balancing
+- Optimize database queries
+- Cache frequently used responses
+
+Analytics & Monitoring:
+- Track usage metrics per user
+- Monitor response latency
+- Measure token consumption
+- Alert on unusual patterns`,
+        provider: "claude",
+        scenario: "code",
+        description: "Real-time chat application - ~1700 input tokens"
+    },
+
+    training: {
+        name: "Training: Fine-tuning Custom LLM Model",
+        plan: `Plan and execute LLM fine-tuning project
+
+Data Preparation:
+- Collect and curate training dataset (10K-100K examples)
+- Clean and validate training data
+- Format data for fine-tuning compatibility
+- Split into train/validation/test sets (80/10/10)
+
+Data Quality:
+- Remove duplicates and near-duplicates
+- Validate label accuracy
+- Handle class imbalance
+- Augment data where needed
+
+Fine-tuning Configuration:
+- Select base model and architecture
+- Choose learning rate and batch size
+- Set number of epochs and early stopping
+- Configure validation metrics
+
+Training Process:
+- Run fine-tuning job on GPU cluster
+- Monitor loss curves and metrics
+- Track token usage during training
+- Implement checkpointing for recovery
+
+Evaluation:
+- Test on held-out evaluation set
+- Compare against baseline model
+- Measure task-specific metrics
+- Analyze failure cases
+
+Cost Analysis:
+- Calculate total GPU hours consumed
+- Estimate inference cost per token
+- Compare vs. API-based solutions
+- ROI analysis for custom model
+
+Deployment:
+- Quantize model for deployment
+- Set up serving infrastructure
+- Create A/B test framework
+- Monitor model performance in production
+
+Iteration:
+- Collect user feedback
+- Identify improvement areas
+- Plan next training iteration
+- Document lessons learned`,
+        provider: "claude",
+        scenario: "code",
+        description: "Fine-tuning project planning - ~1400 input tokens"
     }
 };
 

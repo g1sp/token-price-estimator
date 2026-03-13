@@ -28,11 +28,26 @@
                             <label for="templateSelect" class="form-label fw-semibold">📋 Load Test Template</label>
                             <select class="form-select" id="templateSelect">
                                 <option value="">-- Select a test template --</option>
-                                <option value="simple">Simple: REST API Authentication</option>
-                                <option value="rag">RAG: Customer Support Pipeline</option>
-                                <option value="analysis">Data Analysis: Quarterly Metrics</option>
-                                <option value="minimal">Minimal: Weather App Homepage</option>
-                                <option value="agentic">Agentic: Code Review System</option>
+                                <optgroup label="Basic Projects">
+                                    <option value="minimal">Minimal: Weather App Homepage</option>
+                                    <option value="simple">Simple: REST API Authentication</option>
+                                </optgroup>
+                                <optgroup label="Data & Analysis">
+                                    <option value="analysis">Data Analysis: Quarterly Metrics</option>
+                                    <option value="document">Document Processing: Batch Analysis Pipeline</option>
+                                </optgroup>
+                                <optgroup label="LLM Applications">
+                                    <option value="rag">RAG: Customer Support Pipeline</option>
+                                    <option value="chatapp">Chat Application: Real-time Conversational AI</option>
+                                    <option value="production">Production: Full LLM Application Stack</option>
+                                </optgroup>
+                                <optgroup label="Advanced Workflows">
+                                    <option value="agentic">Agentic: Code Review System</option>
+                                    <option value="multiagent">Multi-Agent: Distributed Team Orchestration</option>
+                                </optgroup>
+                                <optgroup label="Training & Optimization">
+                                    <option value="training">Training: Fine-tuning Custom LLM Model</option>
+                                </optgroup>
                             </select>
                             <small class="text-muted d-block mt-2">💡 Tip: Select a template to automatically populate the plan and suggested settings</small>
                         </div>
