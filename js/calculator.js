@@ -65,8 +65,28 @@ class PriceCalculator {
      * @returns {Object} Cost breakdown
      */
     calculateModelCost(inputTokens, outputTokens, model) {
-        const inputCost = (inputTokens / 1_000_000) * model.input_per_1m;
-        const outputCost = (outputTokens / 1_000_000) * model.output_per_1m;
+        // Handle nested pricing structure (short_context/long_context)
+        let inputPrice = model.input_per_1m;
+        let outputPrice = model.output_per_1m;
+
+        // If prices are nested under short_context, extract them
+        if (!inputPrice && model.short_context) {
+            inputPrice = model.short_context.input_per_1m;
+            outputPrice = model.short_context.output_per_1m;
+        }
+
+        // Safety check
+        if (!inputPrice || !outputPrice) {
+            console.error('Missing pricing data for model:', model);
+            return {
+                inputCost: 0,
+                outputCost: 0,
+                totalCost: 0
+            };
+        }
+
+        const inputCost = (inputTokens / 1_000_000) * inputPrice;
+        const outputCost = (outputTokens / 1_000_000) * outputPrice;
         const totalCost = inputCost + outputCost;
 
         return {
