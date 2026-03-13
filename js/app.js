@@ -57,6 +57,8 @@ class TokenPriceApp {
         document.getElementById('visionCalcBtn').addEventListener('click', () => this.handleVisionCalculation());
         document.getElementById('functionCalcBtn').addEventListener('click', () => this.handleFunctionCallCalculation());
         document.getElementById('batchCalcBtn').addEventListener('click', () => this.handleBatchComparison());
+        document.getElementById('plannerCalcBtn').addEventListener('click', () => this.handleBudgetPlanner());
+        document.getElementById('projectorCalcBtn').addEventListener('click', () => this.handleSpendProjector());
 
         // Allow Enter to calculate (Ctrl+Enter in textarea)
         document.getElementById('projectPlan').addEventListener('keydown', (e) => {
@@ -394,6 +396,131 @@ class TokenPriceApp {
             <strong>💰 Savings: ${this.calculator.formatCost(result.comparison.savings)} (${result.comparison.savingsPercent}% discount)</strong><br>
             ${recommendText}<br>
             <small>Batch API processes ${numRequests.toLocaleString()} requests in 24 hours</small>
+        `;
+
+        resultsDiv.style.display = 'block';
+    }
+
+    /**
+     * Handle budget-based capacity planner
+     */
+    handleBudgetPlanner() {
+        const budget = parseFloat(document.getElementById('monthlyBudget').value) || 0;
+        const inputTokens = parseInt(document.getElementById('plannerInputTokens').value) || 0;
+        const outputTokens = parseInt(document.getElementById('plannerOutputTokens').value) || 0;
+        const modelSelect = document.getElementById('plannerModel').value;
+
+        if (budget <= 0 || inputTokens <= 0 || outputTokens <= 0) {
+            this.showError('Please enter valid budget and token values');
+            return;
+        }
+
+        const modelPricing = {
+            'claude-sonnet': { input: 3.00, output: 15.00 },
+            'claude-haiku': { input: 0.80, output: 4.00 },
+            'gpt-4o': { input: 2.50, output: 10.00 },
+            'gemini-flash': { input: 0.075, output: 0.30 }
+        };
+
+        const pricing = modelPricing[modelSelect];
+        if (!pricing) {
+            this.showError('Invalid model selected');
+            return;
+        }
+
+        const result = calculateBudgetCapacity(budget, inputTokens, outputTokens, pricing.input, pricing.output);
+
+        if (result.error) {
+            this.showError(result.error);
+            return;
+        }
+
+        const resultsDiv = document.getElementById('plannerResults');
+        const capacityEl = document.getElementById('plannerCapacityText');
+        const usersEl = document.getElementById('plannerUsersText');
+        const throughputEl = document.getElementById('plannerThroughputText');
+        const tokensEl = document.getElementById('plannerTokensText');
+
+        capacityEl.innerHTML = `
+            <strong>${result.totalRequestsPerMonth.toLocaleString()}</strong> requests/month<br>
+            ${result.costPerRequest > 0 ? `$${result.costPerRequest.toFixed(6)} per request` : 'N/A'}<br>
+            Budget: ${this.calculator.formatCost(result.monthlyBudget)}
+        `;
+
+        usersEl.innerHTML = `
+            <strong>${result.maxActiveUsers.toLocaleString()}</strong> active users<br>
+            (${result.requestsPerUserPerMonth} requests per user/month)<br>
+            OR ${result.requestsPerDay.toLocaleString()} requests/day
+        `;
+
+        throughputEl.innerHTML = `
+            Per Hour: ${result.requestsPerHour.toLocaleString()} requests<br>
+            Per Second: ${result.requestsPerSecond} requests/sec
+        `;
+
+        tokensEl.innerHTML = `
+            Input: ${result.totalInputTokens.toLocaleString()} tokens (${this.calculator.formatCost(result.breakdown.inputCost)})<br>
+            Output: ${result.totalOutputTokens.toLocaleString()} tokens (${this.calculator.formatCost(result.breakdown.outputCost)})<br>
+            <strong>Total: ${result.totalTokens.toLocaleString()} tokens</strong>
+        `;
+
+        resultsDiv.style.display = 'block';
+    }
+
+    /**
+     * Handle monthly spend projector
+     */
+    handleSpendProjector() {
+        const requestsPerDay = parseInt(document.getElementById('projectorRequestsPerDay').value) || 0;
+        const inputTokens = parseInt(document.getElementById('projectorInputTokens').value) || 0;
+        const outputTokens = parseInt(document.getElementById('projectorOutputTokens').value) || 0;
+        const modelSelect = document.getElementById('projectorModel').value;
+
+        if (requestsPerDay <= 0 || inputTokens <= 0 || outputTokens <= 0) {
+            this.showError('Please enter valid request and token values');
+            return;
+        }
+
+        const modelPricing = {
+            'claude-sonnet': { input: 3.00, output: 15.00 },
+            'claude-haiku': { input: 0.80, output: 4.00 },
+            'gpt-4o': { input: 2.50, output: 10.00 },
+            'gemini-flash': { input: 0.075, output: 0.30 }
+        };
+
+        const pricing = modelPricing[modelSelect];
+        if (!pricing) {
+            this.showError('Invalid model selected');
+            return;
+        }
+
+        const result = projectMonthlySpend(requestsPerDay, inputTokens, outputTokens, pricing.input, pricing.output);
+
+        const resultsDiv = document.getElementById('projectorResults');
+        const dailyEl = document.getElementById('projectorDailyText');
+        const monthlyEl = document.getElementById('projectorMonthlyText');
+        const yearlyEl = document.getElementById('projectorYearlyText');
+        const breakdownEl = document.getElementById('projectorTokenBreakdownText');
+
+        dailyEl.innerHTML = `
+            <strong>${this.calculator.formatCost(result.daily.cost)}</strong><br>
+            ${result.daily.requests.toLocaleString()} requests
+        `;
+
+        monthlyEl.innerHTML = `
+            <strong>${this.calculator.formatCost(result.monthly.totalCost)}</strong><br>
+            ${result.monthly.requests.toLocaleString()} requests
+        `;
+
+        yearlyEl.innerHTML = `
+            <strong>${this.calculator.formatCost(result.yearly.totalCost)}</strong><br>
+            ${result.yearly.requests.toLocaleString()} requests
+        `;
+
+        breakdownEl.innerHTML = `
+            Input tokens: ${result.monthly.inputTokens.toLocaleString()} (${this.calculator.formatCost(result.monthly.inputCost)})<br>
+            Output tokens: ${result.monthly.outputTokens.toLocaleString()} (${this.calculator.formatCost(result.monthly.outputCost)})<br>
+            <strong>Total: ${result.monthly.totalCost > 0 ? this.calculator.formatCost(result.monthly.totalCost) : 'N/A'}</strong>
         `;
 
         resultsDiv.style.display = 'block';

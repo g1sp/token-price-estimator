@@ -176,6 +176,112 @@ function calculateRetryOverhead(successRate, baseCost) {
     };
 }
 
+/**
+ * Budget-based capacity planner
+ * @param {number} monthlyBudget - Monthly budget in USD
+ * @param {number} inputTokensPerRequest - Input tokens per request
+ * @param {number} outputTokensPerRequest - Output tokens per request
+ * @param {number} inputPrice - Input price per million tokens
+ * @param {number} outputPrice - Output price per million tokens
+ * @returns {Object} Capacity breakdown
+ */
+function calculateBudgetCapacity(monthlyBudget, inputTokensPerRequest, outputTokensPerRequest, inputPrice, outputPrice) {
+    // Cost per request
+    const costPerRequest = (inputTokensPerRequest / 1_000_000) * inputPrice + (outputTokensPerRequest / 1_000_000) * outputPrice;
+
+    if (costPerRequest <= 0) {
+        return {
+            error: "Invalid pricing data"
+        };
+    }
+
+    // Calculate capacity
+    const maxRequestsPerMonth = Math.floor(monthlyBudget / costPerRequest);
+    const requestsPerDay = Math.floor(maxRequestsPerMonth / 30);
+    const requestsPerHour = Math.floor(requestsPerDay / 24);
+    const requestsPerSecond = (requestsPerHour / 3600).toFixed(2);
+
+    // Calculate total tokens
+    const totalInputTokens = maxRequestsPerMonth * inputTokensPerRequest;
+    const totalOutputTokens = maxRequestsPerMonth * outputTokensPerRequest;
+    const totalTokens = totalInputTokens + totalOutputTokens;
+
+    // Capacity for different user counts
+    const requestsPerUserPerMonth = 30; // Assume 30 requests per user per month
+    const maxActiveUsers = Math.floor(maxRequestsPerMonth / requestsPerUserPerMonth);
+
+    // Cost breakdown
+    const inputCost = (totalInputTokens / 1_000_000) * inputPrice;
+    const outputCost = (totalOutputTokens / 1_000_000) * outputPrice;
+
+    return {
+        monthlyBudget,
+        costPerRequest: parseFloat(costPerRequest.toFixed(6)),
+        totalRequestsPerMonth: maxRequestsPerMonth,
+        requestsPerDay,
+        requestsPerHour,
+        requestsPerSecond,
+        totalInputTokens,
+        totalOutputTokens,
+        totalTokens,
+        maxActiveUsers,
+        requestsPerUserPerMonth,
+        breakdown: {
+            inputCost: parseFloat(inputCost.toFixed(6)),
+            outputCost: parseFloat(outputCost.toFixed(6)),
+            totalCost: parseFloat((inputCost + outputCost).toFixed(6))
+        }
+    };
+}
+
+/**
+ * Monthly spend projector
+ * @param {number} requestsPerDay - Requests per day
+ * @param {number} inputTokensPerRequest - Input tokens per request
+ * @param {number} outputTokensPerRequest - Output tokens per request
+ * @param {number} inputPrice - Input price per million tokens
+ * @param {number} outputPrice - Output price per million tokens
+ * @returns {Object} Monthly spend projection
+ */
+function projectMonthlySpend(requestsPerDay, inputTokensPerRequest, outputTokensPerRequest, inputPrice, outputPrice) {
+    const costPerRequest = (inputTokensPerRequest / 1_000_000) * inputPrice + (outputTokensPerRequest / 1_000_000) * outputPrice;
+
+    const dailyCost = requestsPerDay * costPerRequest;
+    const monthlyCost = dailyCost * 30;
+    const yearlyCost = monthlyCost * 12;
+
+    const dailyInputTokens = requestsPerDay * inputTokensPerRequest;
+    const dailyOutputTokens = requestsPerDay * outputTokensPerRequest;
+    const monthlyInputTokens = dailyInputTokens * 30;
+    const monthlyOutputTokens = dailyOutputTokens * 30;
+
+    const monthlyInputCost = (monthlyInputTokens / 1_000_000) * inputPrice;
+    const monthlyOutputCost = (monthlyOutputTokens / 1_000_000) * outputPrice;
+
+    return {
+        requestsPerDay,
+        costPerRequest: parseFloat(costPerRequest.toFixed(6)),
+        daily: {
+            requests: requestsPerDay,
+            inputTokens: dailyInputTokens,
+            outputTokens: dailyOutputTokens,
+            cost: parseFloat(dailyCost.toFixed(6))
+        },
+        monthly: {
+            requests: requestsPerDay * 30,
+            inputTokens: monthlyInputTokens,
+            outputTokens: monthlyOutputTokens,
+            inputCost: parseFloat(monthlyInputCost.toFixed(6)),
+            outputCost: parseFloat(monthlyOutputCost.toFixed(6)),
+            totalCost: parseFloat(monthlyCost.toFixed(6))
+        },
+        yearly: {
+            requests: requestsPerDay * 365,
+            totalCost: parseFloat(yearlyCost.toFixed(6))
+        }
+    };
+}
+
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
@@ -183,6 +289,8 @@ if (typeof module !== 'undefined' && module.exports) {
         calculateFunctionCallOverhead,
         compareBatchVsRealtime,
         calculateRetryOverhead,
+        calculateBudgetCapacity,
+        projectMonthlySpend,
         VISION_PRICING
     };
 }

@@ -269,6 +269,138 @@
             </div>
         </div>
 
+        <!-- Budget Capacity Planner Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card shadow-sm border-primary">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">💰 Budget-Based Capacity Planner</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-4"><strong>Question:</strong> "I have $X/month budget. How many users/requests can I support?"</p>
+
+                        <div class="row mb-4">
+                            <div class="col-md-3 mb-3">
+                                <label for="monthlyBudget" class="form-label fw-semibold">Monthly Budget ($)</label>
+                                <input type="number" class="form-control" id="monthlyBudget" min="1" value="1000" placeholder="e.g., 1000">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="plannerInputTokens" class="form-label fw-semibold">Input Tokens/Request</label>
+                                <input type="number" class="form-control" id="plannerInputTokens" min="1" value="500" placeholder="e.g., 500">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="plannerOutputTokens" class="form-label fw-semibold">Output Tokens/Request</label>
+                                <input type="number" class="form-control" id="plannerOutputTokens" min="1" value="250" placeholder="e.g., 250">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="plannerModel" class="form-label fw-semibold">Model</label>
+                                <select class="form-select" id="plannerModel">
+                                    <option value="claude-sonnet">Claude Sonnet</option>
+                                    <option value="gpt-4o">GPT-4o</option>
+                                    <option value="gemini-flash">Gemini Flash</option>
+                                    <option value="claude-haiku">Claude Haiku</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary btn-sm w-100 mb-3" id="plannerCalcBtn">Calculate Capacity</button>
+
+                        <div id="plannerResults" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="alert alert-info mb-0">
+                                        <strong>📊 Monthly Capacity</strong><br>
+                                        <span id="plannerCapacityText"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="alert alert-success mb-0">
+                                        <strong>👥 User Capacity</strong><br>
+                                        <span id="plannerUsersText"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="alert alert-light border">
+                                <strong>📈 Throughput Breakdown</strong><br>
+                                <small id="plannerThroughputText"></small>
+                            </div>
+                            <div class="alert alert-light border">
+                                <strong>🧮 Token Usage</strong><br>
+                                <small id="plannerTokensText"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Spend Projector Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card shadow-sm border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">📈 Monthly Spend Projector</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-4"><strong>Question:</strong> "If I get X requests/day, how much will it cost per month/year?"</p>
+
+                        <div class="row mb-4">
+                            <div class="col-md-3 mb-3">
+                                <label for="projectorRequestsPerDay" class="form-label fw-semibold">Requests/Day</label>
+                                <input type="number" class="form-control" id="projectorRequestsPerDay" min="1" value="1000" placeholder="e.g., 1000">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="projectorInputTokens" class="form-label fw-semibold">Input Tokens/Request</label>
+                                <input type="number" class="form-control" id="projectorInputTokens" min="1" value="500" placeholder="e.g., 500">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="projectorOutputTokens" class="form-label fw-semibold">Output Tokens/Request</label>
+                                <input type="number" class="form-control" id="projectorOutputTokens" min="1" value="250" placeholder="e.g., 250">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="projectorModel" class="form-label fw-semibold">Model</label>
+                                <select class="form-select" id="projectorModel">
+                                    <option value="claude-sonnet">Claude Sonnet</option>
+                                    <option value="gpt-4o">GPT-4o</option>
+                                    <option value="gemini-flash">Gemini Flash</option>
+                                    <option value="claude-haiku">Claude Haiku</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-danger btn-sm w-100 mb-3" id="projectorCalcBtn">Project Spend</button>
+
+                        <div id="projectorResults" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="alert alert-info mb-0">
+                                        <strong>📅 Daily Cost</strong><br>
+                                        <span id="projectorDailyText"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="alert alert-warning mb-0">
+                                        <strong>📆 Monthly Cost</strong><br>
+                                        <span id="projectorMonthlyText"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="alert alert-danger mb-0">
+                                        <strong>📊 Yearly Cost</strong><br>
+                                        <span id="projectorYearlyText"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="alert alert-light border">
+                                <strong>🧮 Token Breakdown (Monthly)</strong><br>
+                                <small id="projectorTokenBreakdownText"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Pricing Info Footer -->
         <div class="row mt-5">
             <div class="col-12">
