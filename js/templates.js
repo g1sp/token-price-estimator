@@ -164,12 +164,6 @@ function loadTemplate(templateId) {
         planTextarea.style.height = planTextarea.scrollHeight + 'px';
     }
 
-    // Set provider
-    const providerSelect = document.getElementById('providerSelect');
-    if (providerSelect) {
-        providerSelect.value = template.provider;
-    }
-
     // Set scenario
     const scenarioSelect = document.getElementById('scenarioSelect');
     if (scenarioSelect) {

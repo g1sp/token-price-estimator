@@ -62,18 +62,12 @@ class TokenPriceApp {
      */
     async handleCalculate() {
         const projectPlan = document.getElementById('projectPlan').value;
-        const provider = document.getElementById('providerSelect').value;
         const scenario = document.getElementById('scenarioSelect').value;
         const customRatio = parseFloat(document.getElementById('customRatio').value) || 1;
 
         // Validation
         if (!projectPlan.trim()) {
             this.showError('Please enter your project plan');
-            return;
-        }
-
-        if (!provider) {
-            this.showError('Please select a provider');
             return;
         }
 
@@ -261,7 +255,6 @@ class TokenPriceApp {
      */
     handleReset() {
         document.getElementById('projectPlan').value = '';
-        document.getElementById('providerSelect').value = '';
         document.getElementById('scenarioSelect').value = 'summary';
         document.getElementById('customRatio').value = '1';
         document.getElementById('customRatioDiv').style.display = 'none';
