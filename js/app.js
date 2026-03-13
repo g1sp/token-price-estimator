@@ -43,6 +43,10 @@ class TokenPriceApp {
             } else {
                 customRatioDiv.style.display = 'none';
             }
+            // Auto-recalculate when scenario changes
+            if (this.currentInputTokens > 0) {
+                this.handleCalculate();
+            }
         });
 
         // Results controls
