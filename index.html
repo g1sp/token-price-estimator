@@ -25,6 +25,19 @@
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
+                            <label for="templateSelect" class="form-label fw-semibold">📋 Load Test Template</label>
+                            <select class="form-select" id="templateSelect">
+                                <option value="">-- Select a test template --</option>
+                                <option value="simple">Simple: REST API Authentication</option>
+                                <option value="rag">RAG: Customer Support Pipeline</option>
+                                <option value="analysis">Data Analysis: Quarterly Metrics</option>
+                                <option value="minimal">Minimal: Weather App Homepage</option>
+                                <option value="agentic">Agentic: Code Review System</option>
+                            </select>
+                            <small class="text-muted d-block mt-2">💡 Tip: Select a template to automatically populate the plan and suggested settings</small>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="providerSelect" class="form-label fw-semibold">Primary LLM Provider</label>
                             <select class="form-select" id="providerSelect">
                                 <option value="">-- Select a provider --</option>
