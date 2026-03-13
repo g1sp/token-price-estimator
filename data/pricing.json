@@ -1,0 +1,76 @@
+{
+  "providers": {
+    "claude": {
+      "name": "Claude (Anthropic)",
+      "pricing_url": "https://www.anthropic.com/pricing",
+      "models": [
+        {
+          "name": "Claude 3.5 Opus",
+          "id": "claude-opus-4-6",
+          "input_per_1m": 15.00,
+          "output_per_1m": 75.00
+        },
+        {
+          "name": "Claude 3.5 Sonnet",
+          "id": "claude-sonnet-4-6",
+          "input_per_1m": 3.00,
+          "output_per_1m": 15.00
+        },
+        {
+          "name": "Claude 3.5 Haiku",
+          "id": "claude-haiku-4-5",
+          "input_per_1m": 0.80,
+          "output_per_1m": 4.00
+        }
+      ]
+    },
+    "gemini": {
+      "name": "Google Gemini",
+      "pricing_url": "https://ai.google.dev/pricing",
+      "models": [
+        {
+          "name": "Gemini 2.0 Flash",
+          "id": "gemini-2-flash",
+          "input_per_1m": 0.075,
+          "output_per_1m": 0.30
+        },
+        {
+          "name": "Gemini 1.5 Pro",
+          "id": "gemini-1.5-pro",
+          "input_per_1m": 1.50,
+          "output_per_1m": 6.00
+        },
+        {
+          "name": "Gemini 1.5 Flash",
+          "id": "gemini-1.5-flash",
+          "input_per_1m": 0.075,
+          "output_per_1m": 0.30
+        }
+      ]
+    },
+    "openai": {
+      "name": "OpenAI",
+      "pricing_url": "https://openai.com/pricing",
+      "models": [
+        {
+          "name": "GPT-4o",
+          "id": "gpt-4o",
+          "input_per_1m": 2.50,
+          "output_per_1m": 10.00
+        },
+        {
+          "name": "GPT-4 Turbo",
+          "id": "gpt-4-turbo",
+          "input_per_1m": 10.00,
+          "output_per_1m": 30.00
+        },
+        {
+          "name": "GPT-3.5 Turbo",
+          "id": "gpt-3.5-turbo",
+          "input_per_1m": 0.50,
+          "output_per_1m": 1.50
+        }
+      ]
+    }
+  }
+}
