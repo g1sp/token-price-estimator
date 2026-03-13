@@ -134,25 +134,110 @@ class TokenPriceApp {
         `;
         document.getElementById('tokenSummary').innerHTML = summaryHtml;
 
+        // Sort results by total cost for better readability
+        const sortedResults = [...this.currentResults].sort((a, b) => a.totalCost - b.totalCost);
+
+        // Find min and max costs for scaling
+        const minCost = sortedResults[0].totalCost;
+        const maxCost = sortedResults[sortedResults.length - 1].totalCost;
+        const costRange = maxCost - minCost || 1;
+
+        // Generate cost comparison visualization (horizontal bars)
+        const comparisonHtml = `
+            <div class="mb-4">
+                <h6 class="fw-bold mb-3">💰 Cost Comparison at a Glance</h6>
+                ${sortedResults.map((result, index) => {
+                    const barWidth = ((result.totalCost - minCost) / costRange) * 100 + 10; // Add 10% minimum
+                    const isCheapest = index === 0;
+                    const isExpensive = index === sortedResults.length - 1;
+                    const barColor = isCheapest ? '#27ae60' : (isExpensive ? '#e74c3c' : '#f39c12');
+
+                    return `
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-semibold">${result.model}</span>
+                                <span class="fw-bold">${this.calculator.formatCostShort(result.totalCost)}</span>
+                            </div>
+                            <div style="background: #f0f0f0; border-radius: 4px; overflow: hidden; height: 24px;">
+                                <div style="background: ${barColor}; width: ${barWidth}%; height: 100%; display: flex; align-items: center; padding: 0 8px; color: white; font-weight: bold; font-size: 12px; transition: width 0.3s ease;">
+                                    ${isCheapest ? '✓ Best Value' : (isExpensive ? '💎 Premium' : '')}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+
+        const resultsTable = document.getElementById('resultsTable');
+        resultsTable.insertAdjacentHTML('beforebegin', comparisonHtml);
+
+        // Generate cost cards (summary view)
+        const cardsHtml = `
+            <div class="mb-4">
+                <h6 class="fw-bold mb-3">📋 Detailed Cost Breakdown</h6>
+                <div class="row g-3">
+                    ${sortedResults.map((result, index) => {
+                        const isCheapest = index === 0;
+                        const borderColor = isCheapest ? 'border-success' : 'border-secondary';
+                        const badgeColor = isCheapest ? 'bg-success' : 'bg-secondary';
+
+                        return `
+                            <div class="col-md-4">
+                                <div class="card h-100 ${borderColor}" style="border-width: 2px;">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="card-title mb-0">${result.model}</h6>
+                                            ${isCheapest ? '<span class="badge ' + badgeColor + '">Best Value</span>' : ''}
+                                        </div>
+                                        <small class="text-muted d-block mb-3">${result.provider}</small>
+
+                                        <div class="mb-3" style="border-top: 1px solid #eee; padding-top: 12px;">
+                                            <div class="d-flex justify-content-between mb-2" style="font-size: 14px;">
+                                                <span>Input:</span>
+                                                <span>${this.calculator.formatCostShort(result.inputCost)}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-2" style="font-size: 14px;">
+                                                <span>Output:</span>
+                                                <span>${this.calculator.formatCostShort(result.outputCost)}</span>
+                                            </div>
+                                        </div>
+
+                                        <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; text-align: center;">
+                                            <small class="text-muted">Total Cost</small>
+                                            <div class="fw-bold" style="font-size: 20px; color: ${isCheapest ? '#27ae60' : '#333'};">
+                                                ${this.calculator.formatCostShort(result.totalCost)}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+
+        resultsTable.insertAdjacentHTML('beforebegin', cardsHtml);
+
         // Generate table rows
         const tbody = document.getElementById('resultsBody');
         tbody.innerHTML = '';
 
-        // Sort results by total cost for better readability
-        const sortedResults = [...this.currentResults].sort((a, b) => a.totalCost - b.totalCost);
-
-        sortedResults.forEach(result => {
+        sortedResults.forEach((result, index) => {
             const row = document.createElement('tr');
             const costCategory = this.calculator.getCostCategory(result.totalCost);
+            const isCheapest = index === 0;
+            const rowStyle = isCheapest ? 'background-color: #d4edda;' : '';
 
             row.innerHTML = `
-                <td>
-                    <div class="fw-semibold">${result.model}</div>
+                <td style="${rowStyle}">
+                    <div class="fw-semibold">${result.model} ${isCheapest ? '✓' : ''}</div>
                     <small class="text-muted">${result.provider}</small>
                 </td>
-                <td class="text-end">${this.calculator.formatCostShort(result.inputCost)}</td>
-                <td class="text-end">${this.calculator.formatCostShort(result.outputCost)}</td>
-                <td class="text-end">
+                <td class="text-end" style="${rowStyle}">${this.calculator.formatCostShort(result.inputCost)}</td>
+                <td class="text-end" style="${rowStyle}">${this.calculator.formatCostShort(result.outputCost)}</td>
+                <td class="text-end" style="${rowStyle}">
                     <span class="cost-${costCategory} fw-bold">
                         ${this.calculator.formatCostShort(result.totalCost)}
                     </span>
