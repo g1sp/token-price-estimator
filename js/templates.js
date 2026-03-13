@@ -404,6 +404,62 @@ Iteration:
         provider: "claude",
         scenario: "code",
         description: "Fine-tuning project planning - ~1400 input tokens"
+    },
+
+    vision: {
+        name: "Vision: Image Analysis & Processing System",
+        plan: `Build an AI system for image analysis and understanding
+
+Image Ingestion:
+- Accept images from multiple sources (upload, URL, API)
+- Support formats: JPEG, PNG, WebP, GIF
+- Implement image validation and sanitization
+- Resize and optimize for model processing
+
+Image Processing Pipeline:
+- Extract visual features from images
+- Perform object detection and classification
+- Identify text and content within images
+- Generate visual descriptions
+
+Analysis & Understanding:
+- Classify images by category
+- Extract text (OCR) from images
+- Identify entities in images (people, objects, scenes)
+- Analyze composition and aesthetics
+
+Multi-modal Integration:
+- Combine image analysis with text queries
+- Support follow-up questions about images
+- Generate detailed captions and summaries
+- Create structured data from visual content
+
+Use Cases:
+- Product image analysis for e-commerce
+- Document scanning and processing
+- Medical image analysis assistance
+- Social media content moderation
+
+API Implementation:
+- Design endpoints for image submission
+- Implement async processing for large batches
+- Cache vision model responses
+- Handle concurrent image requests
+
+Cost Optimization:
+- Batch similar images to reduce overhead
+- Implement image compression before processing
+- Cache analysis results for same images
+- Monitor and track per-image costs
+
+Performance & Scaling:
+- Process 100+ images per second
+- Maintain sub-2 second latency per image
+- Support parallel image processing
+- Monitor model accuracy metrics`,
+        provider: "claude",
+        scenario: "code",
+        description: "Vision model system - ~1200 input tokens"
     }
 };
 

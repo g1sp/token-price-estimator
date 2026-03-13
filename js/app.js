@@ -53,6 +53,11 @@ class TokenPriceApp {
         document.getElementById('copyBtn').addEventListener('click', () => this.handleCopyResults());
         document.getElementById('backBtn').addEventListener('click', () => this.handleBack());
 
+        // Advanced calculators
+        document.getElementById('visionCalcBtn').addEventListener('click', () => this.handleVisionCalculation());
+        document.getElementById('functionCalcBtn').addEventListener('click', () => this.handleFunctionCallCalculation());
+        document.getElementById('batchCalcBtn').addEventListener('click', () => this.handleBatchComparison());
+
         // Allow Enter to calculate (Ctrl+Enter in textarea)
         document.getElementById('projectPlan').addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
@@ -266,6 +271,132 @@ class TokenPriceApp {
         document.getElementById('emptyState').style.display = 'block';
         this.currentResults = [];
         this.cacheKeyForCopy = null;
+    }
+
+    /**
+     * Handle vision model cost calculation
+     */
+    handleVisionCalculation() {
+        const model = document.getElementById('visionModel').value;
+        const numImages = parseInt(document.getElementById('numImages').value) || 0;
+        const tokensPerImage = parseInt(document.getElementById('tokensPerImage').value) || 0;
+
+        if (!model || numImages <= 0 || tokensPerImage <= 0) {
+            this.showError('Please fill in all vision calculator fields');
+            return;
+        }
+
+        const result = calculateVisionCost(numImages, tokensPerImage, model);
+
+        if (!result) {
+            this.showError('Model not found in vision pricing data');
+            return;
+        }
+
+        const resultsDiv = document.getElementById('visionResults');
+        const resultsText = document.getElementById('visionResultsText');
+
+        resultsText.innerHTML = `
+            <strong>${result.description}</strong><br>
+            ${numImages} images × ${tokensPerImage} tokens = ${result.totalImageTokens.toLocaleString()} image tokens<br>
+            <strong>Cost: ${this.calculator.formatCost(result.imageCost)}</strong>
+        `;
+        resultsDiv.style.display = 'block';
+    }
+
+    /**
+     * Handle function call overhead calculation
+     */
+    handleFunctionCallCalculation() {
+        const numCalls = parseInt(document.getElementById('numFunctionCalls').value) || 0;
+        const baseInput = parseInt(document.getElementById('baseInputTokens').value) || 0;
+        const baseOutput = parseInt(document.getElementById('baseOutputTokens').value) || 0;
+        const tokensPerCall = parseInt(document.getElementById('tokensPerCall').value) || 0;
+
+        if (numCalls < 0 || baseInput < 0 || baseOutput < 0 || tokensPerCall <= 0) {
+            this.showError('Please enter valid values');
+            return;
+        }
+
+        const result = calculateFunctionCallOverhead(numCalls, tokensPerCall, baseInput, baseOutput);
+        const resultsDiv = document.getElementById('functionResults');
+        const resultsText = document.getElementById('functionResultsText');
+
+        resultsText.innerHTML = `
+            <strong>Function Call Overhead Analysis</strong><br>
+            Base input tokens: ${baseInput.toLocaleString()}<br>
+            Overhead tokens: <strong>+${result.overheadTokens.toLocaleString()}</strong> (${result.percentageIncrease}% increase)<br>
+            Total input tokens: ${result.totalInputTokens.toLocaleString()}<br>
+            Base output tokens: ${baseOutput.toLocaleString()}
+        `;
+        resultsDiv.style.display = 'block';
+    }
+
+    /**
+     * Handle batch vs real-time cost comparison
+     */
+    handleBatchComparison() {
+        const numRequests = parseInt(document.getElementById('batchNumRequests').value) || 0;
+        const inputTokens = parseInt(document.getElementById('batchInputTokens').value) || 0;
+        const outputTokens = parseInt(document.getElementById('batchOutputTokens').value) || 0;
+        const modelSelect = document.getElementById('batchModel').value;
+
+        if (numRequests <= 0 || inputTokens <= 0 || outputTokens <= 0) {
+            this.showError('Please enter valid request and token values');
+            return;
+        }
+
+        // Get pricing for selected model
+        const modelPricing = {
+            'claude-sonnet': { input: 3.00, output: 15.00 },
+            'gpt-4o': { input: 2.50, output: 10.00 },
+            'gemini-flash': { input: 0.075, output: 0.30 }
+        };
+
+        const pricing = modelPricing[modelSelect];
+        if (!pricing) {
+            this.showError('Invalid model selected');
+            return;
+        }
+
+        const result = compareBatchVsRealtime(
+            numRequests,
+            inputTokens,
+            outputTokens,
+            pricing.input,
+            pricing.output
+        );
+
+        const resultsDiv = document.getElementById('batchResults');
+        const realtimeEl = document.getElementById('realtimeTotal');
+        const batchEl = document.getElementById('batchTotal');
+        const comparisonEl = document.getElementById('batchComparison');
+
+        realtimeEl.innerHTML = `
+            ${this.calculator.formatCost(result.realtime.inputCost)} (input)<br>
+            ${this.calculator.formatCost(result.realtime.outputCost)} (output)<br>
+            <strong>Total: ${this.calculator.formatCost(result.realtime.totalCost)}</strong>
+        `;
+
+        batchEl.innerHTML = `
+            ${this.calculator.formatCost(result.batch.inputCost)} (input)<br>
+            ${this.calculator.formatCost(result.batch.outputCost)} (output)<br>
+            <strong>Total: ${this.calculator.formatCost(result.batch.totalCost)}</strong>
+        `;
+
+        const recommendClass = result.comparison.recommendBatch ? 'alert-success' : 'alert-info';
+        const recommendText = result.comparison.recommendBatch
+            ? '✅ Batch recommended: Saves $' + result.comparison.savings.toFixed(2)
+            : '💡 Consider batch for larger workloads';
+
+        comparisonEl.className = `alert ${recommendClass}`;
+        comparisonEl.innerHTML = `
+            <strong>💰 Savings: ${this.calculator.formatCost(result.comparison.savings)} (${result.comparison.savingsPercent}% discount)</strong><br>
+            ${recommendText}<br>
+            <small>Batch API processes ${numRequests.toLocaleString()} requests in 24 hours</small>
+        `;
+
+        resultsDiv.style.display = 'block';
     }
 
     /**

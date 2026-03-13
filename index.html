@@ -132,6 +132,143 @@
             </div>
         </div>
 
+        <!-- Advanced Features Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h4 class="mb-4">🚀 Advanced Calculators</h4>
+            </div>
+        </div>
+
+        <!-- Vision Model Calculator -->
+        <div class="row mb-5">
+            <div class="col-lg-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">👁️ Vision Model Costs</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="visionModel" class="form-label fw-semibold">Model</label>
+                            <select class="form-select" id="visionModel">
+                                <option value="">-- Select a model --</option>
+                                <optgroup label="Claude">
+                                    <option value="claude-opus-4-6">Claude 3.5 Opus</option>
+                                    <option value="claude-sonnet-4-6">Claude 3.5 Sonnet</option>
+                                    <option value="claude-haiku-4-5">Claude 3.5 Haiku</option>
+                                </optgroup>
+                                <optgroup label="OpenAI">
+                                    <option value="gpt-4o">GPT-4o</option>
+                                    <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                                </optgroup>
+                                <optgroup label="Gemini">
+                                    <option value="gemini-2-flash">Gemini 2.0 Flash</option>
+                                    <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="numImages" class="form-label fw-semibold">Number of Images</label>
+                            <input type="number" class="form-control" id="numImages" min="1" value="10" placeholder="e.g., 10">
+                        </div>
+                        <div class="mb-3">
+                            <label for="tokensPerImage" class="form-label fw-semibold">Tokens per Image</label>
+                            <input type="number" class="form-control" id="tokensPerImage" min="100" value="768" placeholder="e.g., 768 for 1024x1024">
+                            <small class="text-muted">Typical: 768 for 1024x1024 image</small>
+                        </div>
+                        <button class="btn btn-info btn-sm w-100" id="visionCalcBtn">Calculate Vision Cost</button>
+                        <div id="visionResults" class="mt-3" style="display: none;">
+                            <div class="alert alert-info mb-0" id="visionResultsText"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Function Call Overhead Calculator -->
+            <div class="col-lg-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">🔧 Function Call Overhead</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="numFunctionCalls" class="form-label fw-semibold">Number of Function Calls</label>
+                            <input type="number" class="form-control" id="numFunctionCalls" min="0" value="5" placeholder="e.g., 5">
+                        </div>
+                        <div class="mb-3">
+                            <label for="baseInputTokens" class="form-label fw-semibold">Base Input Tokens</label>
+                            <input type="number" class="form-control" id="baseInputTokens" min="0" value="500" placeholder="e.g., 500">
+                        </div>
+                        <div class="mb-3">
+                            <label for="baseOutputTokens" class="form-label fw-semibold">Base Output Tokens</label>
+                            <input type="number" class="form-control" id="baseOutputTokens" min="0" value="200" placeholder="e.g., 200">
+                        </div>
+                        <div class="mb-3">
+                            <label for="tokensPerCall" class="form-label fw-semibold">Tokens per Function Call</label>
+                            <input type="number" class="form-control" id="tokensPerCall" min="50" value="250" placeholder="e.g., 250">
+                            <small class="text-muted">Typical: 200-500 tokens per call</small>
+                        </div>
+                        <button class="btn btn-warning btn-sm w-100" id="functionCalcBtn">Calculate Overhead</button>
+                        <div id="functionResults" class="mt-3" style="display: none;">
+                            <div class="alert alert-warning mb-0" id="functionResultsText"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Batch vs Real-time Calculator -->
+        <div class="row mb-5">
+            <div class="col-lg-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">📦 Batch vs Real-time Cost Comparison</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="batchNumRequests" class="form-label fw-semibold">Number of Requests</label>
+                                <input type="number" class="form-control" id="batchNumRequests" min="1" value="1000" placeholder="e.g., 1000">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="batchInputTokens" class="form-label fw-semibold">Input Tokens/Request</label>
+                                <input type="number" class="form-control" id="batchInputTokens" min="1" value="500" placeholder="e.g., 500">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="batchOutputTokens" class="form-label fw-semibold">Output Tokens/Request</label>
+                                <input type="number" class="form-control" id="batchOutputTokens" min="1" value="250" placeholder="e.g., 250">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="batchModel" class="form-label fw-semibold">Model</label>
+                                <select class="form-select" id="batchModel">
+                                    <option value="claude-sonnet">Claude Sonnet</option>
+                                    <option value="gpt-4o">GPT-4o</option>
+                                    <option value="gemini-flash">Gemini Flash</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-success btn-sm w-100" id="batchCalcBtn">Compare Costs</button>
+                        <div id="batchResults" class="mt-3" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="alert alert-info mb-2">
+                                        <strong>⚡ Real-time (Immediate)</strong><br>
+                                        <span id="realtimeTotal"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="alert alert-success mb-2">
+                                        <strong>📦 Batch (24-hour wait)</strong><br>
+                                        <span id="batchTotal"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="alert alert-warning" id="batchComparison"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Pricing Info Footer -->
         <div class="row mt-5">
             <div class="col-12">
@@ -165,6 +302,7 @@
     <script src="js/tokenizer.js"></script>
     <script src="js/calculator.js"></script>
     <script src="js/templates.js"></script>
+    <script src="js/advanced-features.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
